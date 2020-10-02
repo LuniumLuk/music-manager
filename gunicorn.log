@@ -1,0 +1,15 @@
+[2020-09-30 10:22:48 +0800] [22746] [INFO] Starting gunicorn 20.0.4
+[2020-09-30 10:22:48 +0800] [22746] [INFO] Listening at: http://0.0.0.0:8001 (22746)
+[2020-09-30 10:22:48 +0800] [22746] [INFO] Using worker: sync
+[2020-09-30 10:22:48 +0800] [22756] [INFO] Booting worker with pid: 22756
+[2020-09-30 10:22:48 +0800] [22757] [INFO] Booting worker with pid: 22757
+[2020-09-30 10:22:48 +0800] [22759] [INFO] Booting worker with pid: 22759
+[2020-09-30 10:22:48 +0800] [22760] [INFO] Booting worker with pid: 22760
+[2020-09-30 10:36:49 +0800] [22756] [INFO] Parent changed, shutting down: <Worker 22756>
+[2020-09-30 10:36:49 +0800] [22756] [INFO] Worker exiting (pid: 22756)
+[2020-09-30 10:36:49 +0800] [22757] [INFO] Parent changed, shutting down: <Worker 22757>
+[2020-09-30 10:36:49 +0800] [22757] [INFO] Worker exiting (pid: 22757)
+[2020-09-30 10:36:49 +0800] [22759] [INFO] Parent changed, shutting down: <Worker 22759>
+[2020-09-30 10:36:49 +0800] [22759] [INFO] Worker exiting (pid: 22759)
+[2020-09-30 10:36:49 +0800] [22760] [INFO] Parent changed, shutting down: <Worker 22760>
+[2020-09-30 10:36:49 +0800] [22760] [INFO] Worker exiting (pid: 22760)

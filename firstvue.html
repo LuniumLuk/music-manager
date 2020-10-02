@@ -1,0 +1,22 @@
+<html>
+	<head>
+		<title>This is a first vue page</title>
+		<script src="https://cdn.jsdelivr.net/npm/vue"></script>
+	</head>
+	<body>
+		<div id="app">
+			{{ message }}
+		</div>
+		<button type="button" onclick="window.location.href='/log'">Click to Check Log</button>
+		<button type="button" onclick="window.location.href='/music_01'">Show Music_01</button>
+		<button type="button" onclick="window.location.href='/music_02'">Show Music_02</button>
+	</body>
+	<script>
+		var app = new Vue({
+			el: '#app',
+			data: {
+				message: 'Hello Vue!'
+			}
+		})
+	</script>
+</html>
