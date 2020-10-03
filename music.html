@@ -5,19 +5,54 @@
 			.music-cover {
 				border-radius: 60px;
 			}
-            .title {
-                width: 100%;
-                font-size: 60px;
-                color: white;
+            .title-wrap {
+                width: 100vw;
                 background-color: blue;
+                padding: 10px;
             }
-            .music-card {
+            .title {
+                margin-bottom: 20px;
+                color: white;
+                font-size: 60px;
+            }
+            .title-a-wrap {
                 display: flex;
                 flex-direction: row;
-                font-size: 36px;
+                justify-content: space-between;
+                width: 20vw;
+            }
+            .title-a-wrap > a {
+                color: white;
+            }
+            .wrap {
+                width: 100vw;
+                display: flex;
+                flex-direction: row;
+            }
+            .music-list {
+                height: 80vh;
+                overflow-y: scroll;
+                padding: 50px;
+            }
+            .music-player {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                margin: 50px;
+            }
+            .music-player > img {
+                border-radius: 128px;
             }
 		</style>
 	</head>
 	<body>
-        <p class = "title">Digital Assets Management V0.0.0</p>
-
+        <div class = "title-wrap">
+            <text class = "title">Digital Assets Management V0.0.0</text>
+            <div class = "title-a-wrap">
+                <a href="music/page=1">ACG音乐</a>
+                <a href="music/page=1">粤语经典</a>
+                <a href="music/page=1">国语经典</a>
+            </div>
+        </div>
+        <div class = "wrap">
+            <div class = "music-list">
