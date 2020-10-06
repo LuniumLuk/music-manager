@@ -1,19 +1,13 @@
 from flask import Flask, render_template, json, jsonify
 import os
 import sys
-import numpy as np
-import json
 import math
 
 app = Flask(__name__)
 
-def listToJson(lst):
-    keys = [str(x) for x in np.arange(len(lst))]
-    list_json = dict(zip(keys, lst))
-    str_json = json.dumps(list_json, indent=2, ensure_ascii=False)
-    # json转为string
-    return str_json.encode('utf-8')
-
+# 获取歌曲列表，即歌曲分区文件夹下的所有.txt的文件名
+# 方便计算歌曲数量、读取歌曲信息等等
+# 该函数目前并未调用
 def get_list(root):
     path = sys.path[0]
     file = os.listdir(path + '/' + root)
@@ -24,6 +18,8 @@ def get_list(root):
     txt_files.sort()
     return txt_files
 
+# 获取某种分区的所有歌曲信息
+# 返回一个JSON对象
 def get_songs(style):
     songs = []
     path = sys.path[0]
@@ -50,21 +46,9 @@ all_songs = {
     "can": get_songs('can')
 }
 
-acg_list = get_list('static/data/acg')
-man_list = get_list('static/data/man')
-can_list = get_list('static/data/can')
-
 @app.route('/music')
 def music(style='acg', page='1', cn='10'):
     page = int(page)
-    if(style == 'acg'):
-        song_list = acg_list
-    elif(style == 'man'):
-        song_list = man_list
-    elif(style == 'can'):
-        song_list = can_list
-    else:
-        song_list = []
     cn = int(cn)
     songs = all_songs[style]
     max_page = math.ceil(len(songs) / cn)
@@ -80,14 +64,6 @@ def music(style='acg', page='1', cn='10'):
 @app.route('/music/<style>')
 def music_style(style='acg', page='1', cn='10'):
     page = int(page)
-    if(style == 'acg'):
-        song_list = acg_list
-    elif(style == 'man'):
-        song_list = man_list
-    elif(style == 'can'):
-        song_list = can_list
-    else:
-        song_list = []
     cn = int(cn)
     songs = all_songs[style]
     max_page = math.ceil(len(songs) / cn)
@@ -104,14 +80,6 @@ def music_style(style='acg', page='1', cn='10'):
 @app.route('/music/<style>/page=<page>&cn=<cn>')
 def music_style_page(style='acg', page='1', cn='10'):
     page = int(page)
-    if(style == 'acg'):
-        song_list = acg_list
-    elif(style == 'man'):
-        song_list = man_list
-    elif(style == 'can'):
-        song_list = can_list
-    else:
-        song_list = []
     cn = int(cn)
     songs = all_songs[style]
     max_page = math.ceil(len(songs) / cn)
@@ -124,7 +92,8 @@ def music_style_page(style='acg', page='1', cn='10'):
         })
     return render_template('music_template.html', songs=songs, pages=pages, maxPage=max_page, page=page, style=style, cn=cn, href="../../")
 
-
+# http:GET方法获取所有歌曲信息
+# 需要改进，冗余较高
 @app.route('/getSongs/<style>', methods=['GET'])
 def get(style):
     return jsonify(all_songs[style])
