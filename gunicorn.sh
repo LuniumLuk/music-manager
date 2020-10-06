@@ -1,2 +1,1 @@
-
-nohup gunicorn -w 4 -b 0.0.0.0:8001 hello:app &
+nohup gunicorn -w 4 -D -b 0.0.0.0:5000 hello:app
