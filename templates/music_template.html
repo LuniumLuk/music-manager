@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <title>DAM Music Manager</title>
+        <meta http-equiv="Content-Language" content="English" />
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link rel="stylesheet" type="text/css" href="{{ href }}static/style.css" media="screen" />
+        <script type="text/javascript">
+            
+            var songs = []
+            var player = ""
+            
+            function changeSong(id) {
+                document.getElementById("player-title").innerHTML = songs[id].title;
+                document.getElementById("player-duration").innerHTML = songs[id].duration;
+                document.getElementById("player-album").innerHTML = songs[id].album;
+                document.getElementById("player-singer").innerHTML = songs[id].singer;
+                document.getElementById("player-cover").src = songs[id].cover;
+                document.getElementById("player-audio").src = songs[id].url;
+            }
+            
+            window.onload = function() {
+                getSongs();
+                player = document.getElementById("player-audio")
+                playerCover = document.getElementById("player-cover")
+                player.addEventListener("play", function () {
+                    console.log("play")
+                    playerCover.id = "player-cover-play"
+                });
+                player.addEventListener("pause", function () {
+                    console.log("pause")
+                    playerCover.id = "player-cover"
+                });
+                player.addEventListener("ended", function () {
+                    console.log("ended")
+                    playerCover.id = "player-cover"
+                });
+            }
+            
+            function getSongs() {
+                var httpRequest = new XMLHttpRequest();//第一步：建立所需的对象
+                httpRequest.open('GET', '{{ href }}getSongs/{{ style }}', true);//第二步：打开连接  将请求参数写在url中  ps:"./Ptest.php?name=test&nameone=testone"
+                httpRequest.send();//第三步：发送请求  将请求参数写在URL中
+                /**
+                 * 获取数据后的处理程序
+                 */
+                httpRequest.onreadystatechange = function () {
+                    if (httpRequest.readyState == 4 && httpRequest.status == 200) {
+                        var json = httpRequest.responseText;//获取到json字符串，还需解析
+                        songs = JSON.parse(json)
+                    }
+                };
+            }
+
+        </script>
+    </head>
+    <body>
+        <div id="wrap">
+            <div id="header">
+                <h1>DAM Music Manager V1.0.0</h1>
+            </div>
+            <div id="player">
+                <img id="player-cover" class="pause" src="{{ songs[0].cover }}" alt="music cover" width=100px height=100px />
+                <div style="width: 300px">
+                    <h2 id="player-title">{{ songs[0].title }}</h2>
+                    <li id="player-duration">{{ songs[0].duration }}</li>
+                    <li id="player-album">{{ songs[0].album }}</li>
+                    <li id="player-singer">{{ songs[0].singer }}</li>
+                </div>
+                <audio id="player-audio" src="{{ songs[0].url }}" controls="controls" />
+            </div>
+            <div id="right">
+                <table style="width: 580px" border="1">
+                    {% for item in songs %}
+                    <tr>
+                        <td width=30px>{{ item.id }}</td>
+                        <td><a class="test" href="javascript:changeSong({{ item.id - 1 }});">{{ item.title }}</a></td>
+                        <td>{{ item.singer }}</td>
+                    </tr>
+                    {% endfor %}
+                </table>
+                <br />
+                <div id="pn">
+                    {% if page == 1 %}
+                    <text>Prev</text>
+                    {% else %}
+                    <a href="{{ pages[page-2].url }}">Prev</a>
+                    {% endif %}
+                    
+                    {% for item in pages %}
+                        {% if item.id == page %}
+                        <text>{{ item.id }}</text>
+                        {% else %}
+                        <a href="{{ item.url }}">{{ item.id }}</a>
+                        {% endif %}
+                    {% endfor %}
+                    
+                    {% if page == maxPage %}
+                    <text>Next</text>
+                    {% else %}
+                    <a href="{{ pages[page].url }}">Next</a>
+                    {% endif %}
+                </div>
+            </div>
+            <div id="left">
+                <h2>Navigation</h2>
+                <ul>
+                    <li><a href="{{ href }}music/acg/page=1&cn={{ cn }}">ACG Destrict</a></li>
+                    <li><a href="{{ href }}music/man/page=1&cn={{ cn }}">Mandarin Classic</a></li>
+                    <li><a href="{{ href }}music/can/page=1&cn={{ cn }}">Cantonese Classic</a></li>
+                </ul>
+                <br />
+                <text>Songs per page:</text>
+                <div>
+                    <a href="page=1&cn=10">10</a>
+                    <a href="page=1&cn=15">15</a>
+                    <a href="page=1&cn=20">20</a>
+                </div>
+            </div>
+            <div style="clear: both;"> </div>
+            <div id="footer">
+            Designed by <a href="http://www.free-css-templates.com/">Free CSS Templates</a>, Thanks to <a href="http://www.openwebdesign.org/">Web Design</a>
+            </div>
+        </div>
+    </body>
+</html>
