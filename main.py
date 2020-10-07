@@ -5,21 +5,6 @@ import math
 
 app = Flask(__name__)
 
-# 获取歌曲列表，即歌曲分区文件夹下的所有.txt的文件名
-# 方便计算歌曲数量、读取歌曲信息等等
-# 该函数目前并未调用
-def get_list(root):
-    path = sys.path[0]
-    file = os.listdir(path + '/' + root)
-    txt_files = []
-    for f in file:
-        if f.endswith('.txt'):
-            txt_files.append(path + '/' + root + '/' + f)
-    txt_files.sort()
-    return txt_files
-
-# 获取某种分区的所有歌曲信息
-# 返回一个JSON对象
 def get_songs(style):
     songs = []
     path = sys.path[0]
@@ -92,11 +77,16 @@ def music_style_page(style='acg', page='1', cn='10'):
         })
     return render_template('music_template.html', songs=songs, pages=pages, maxPage=max_page, page=page, style=style, cn=cn, href="../../")
 
-# http:GET方法获取所有歌曲信息
-# 需要改进，冗余较高
+
 @app.route('/getSongs/<style>', methods=['GET'])
 def get(style):
     return jsonify(all_songs[style])
+
+@app.route('/getSongs/<style>/page=<page>&cn=<cn>', methods=['GET'])
+def get_page(style, page, cn):
+    page = int(page)
+    cn = int(cn)
+    return jsonify(all_songs[style][(page-1)*cn:page*cn])
 
 
 if __name__ == '__main__':

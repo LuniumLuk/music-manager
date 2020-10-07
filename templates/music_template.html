@@ -38,15 +38,12 @@
             }
             
             function getSongs() {
-                var httpRequest = new XMLHttpRequest();//第一步：建立所需的对象
-                httpRequest.open('GET', '{{ href }}getSongs/{{ style }}', true);//第二步：打开连接  将请求参数写在url中  ps:"./Ptest.php?name=test&nameone=testone"
-                httpRequest.send();//第三步：发送请求  将请求参数写在URL中
-                /**
-                 * 获取数据后的处理程序
-                 */
+                var httpRequest = new XMLHttpRequest();
+                httpRequest.open('GET', '{{ href }}getSongs/{{ style }}/page={{ page }}&cn={{ cn }}', true);
+                httpRequest.send();
                 httpRequest.onreadystatechange = function () {
                     if (httpRequest.readyState == 4 && httpRequest.status == 200) {
-                        var json = httpRequest.responseText;//获取到json字符串，还需解析
+                        var json = httpRequest.responseText;
                         songs = JSON.parse(json)
                     }
                 };
@@ -74,7 +71,7 @@
                     {% for item in songs %}
                     <tr>
                         <td width=30px>{{ item.id }}</td>
-                        <td><a class="test" href="javascript:changeSong({{ item.id - 1 }});">{{ item.title }}</a></td>
+                        <td><a class="test" href="javascript:changeSong({{ item.id - 1 - (page-1) * cn }});">{{ item.title }}</a></td>
                         <td>{{ item.singer }}</td>
                     </tr>
                     {% endfor %}
@@ -112,9 +109,9 @@
                 <br />
                 <text>Songs per page:</text>
                 <div>
-                    <a href="page=1&cn=10">10</a>
-                    <a href="page=1&cn=15">15</a>
-                    <a href="page=1&cn=20">20</a>
+                    <a href="{{ href }}music/{{ style }}/page=1&cn=10">10</a>
+                    <a href="{{ href }}music/{{ style }}/page=1&cn=15">15</a>
+                    <a href="{{ href }}music/{{ style }}/page=1&cn=20">20</a>
                 </div>
             </div>
             <div style="clear: both;"> </div>
