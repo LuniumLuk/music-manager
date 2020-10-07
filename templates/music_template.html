@@ -7,10 +7,14 @@
         <link rel="stylesheet" type="text/css" href="{{ href }}static/style.css" media="screen" />
         <script type="text/javascript">
             
-            var songs = []
-            var player = ""
+            var songs = [];
+            var player = "";
+            var pid = 0;
+            var cn = 0;
+            var eid = 0;
             
             function changeSong(id) {
+                pid = id;
                 document.getElementById("player-title").innerHTML = songs[id].title;
                 document.getElementById("player-duration").innerHTML = songs[id].duration;
                 document.getElementById("player-album").innerHTML = songs[id].album;
@@ -24,16 +28,25 @@
                 player = document.getElementById("player-audio")
                 playerCover = document.getElementById("player-cover")
                 player.addEventListener("play", function () {
-                    console.log("play")
-                    playerCover.id = "player-cover-play"
+                    playerCover.id = "player-cover-play";
                 });
                 player.addEventListener("pause", function () {
-                    console.log("pause")
-                    playerCover.id = "player-cover"
+                    playerCover.id = "player-cover";
                 });
                 player.addEventListener("ended", function () {
-                    console.log("ended")
-                    playerCover.id = "player-cover"
+                    if(pid < cn) {
+                        eid = pid;
+                        pid += 1;
+                        changeSong(pid);
+                    } else {
+                        playerCover.id = "player-cover";
+                    }
+                });
+                player.addEventListener("canplay", function () {
+                    if(eid == pid - 1) {
+                        player.play()
+                    }
+
                 });
             }
             
@@ -44,7 +57,8 @@
                 httpRequest.onreadystatechange = function () {
                     if (httpRequest.readyState == 4 && httpRequest.status == 200) {
                         var json = httpRequest.responseText;
-                        songs = JSON.parse(json)
+                        songs = JSON.parse(json);
+                        cn = songs.length;
                     }
                 };
             }
@@ -54,7 +68,7 @@
     <body>
         <div id="wrap">
             <div id="header">
-                <h1>DAM Music Manager V1.0.1</h1>
+                <h1>DAM Music Manager V1.0.2</h1>
             </div>
             <div id="player">
                 <img id="player-cover" class="pause" src="{{ songs[0].cover }}" alt="music cover" width=100px height=100px />
@@ -113,6 +127,11 @@
                     <a href="{{ href }}music/{{ style }}/page=1&cn=15">15</a>
                     <a href="{{ href }}music/{{ style }}/page=1&cn=20">20</a>
                 </div>
+                <br />
+                <h2>版本说明：V1.0.2</h2>
+                <ul>
+                    <li>添加自动按顺序播放该页所有歌曲功能</li>
+                </ul>
             </div>
             <div style="clear: both;"> </div>
             <div id="footer">
