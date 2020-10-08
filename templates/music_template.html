@@ -13,6 +13,7 @@
             var pid = 0;
             var cn = 0;
             var eid = 0;
+            setView();
             
             function changeSong(id) {
                 player.pause()
@@ -24,6 +25,16 @@
                 playerCover.src = songs[id].cover;
                 playerCover.id = "player-cover";
                 player.src = songs[id].url;
+            }
+            
+            function setView() {
+                var view = sessionStorage.getItem('view-option');
+                if (view == "cover") {
+                    document.styleSheets[0].addRule('#table', 'display: none');
+                    document.styleSheets[0].addRule('#card-wrap', 'display: flex');
+                } else {
+                    document.styleSheets[0].addRule('#card-wrap', 'display: none');
+                }
             }
             
             window.onload = function() {
@@ -70,9 +81,11 @@
                 if(id == 0) {
                     document.getElementById("table").style.display = "block";
                     document.getElementById("card-wrap").style.display = "none";
+                    sessionStorage.setItem('view-option', 'table');
                 } else if(id == 1) {
                     document.getElementById("table").style.display = "none";
                     document.getElementById("card-wrap").style.display = "flex"; 
+                    sessionStorage.setItem('view-option', 'cover');
                 }
             }
 
@@ -94,7 +107,7 @@
                 <audio id="player-audio" src="{{ songs[0].url }}" controls="controls" />
             </div>
             <div id="right">
-                <table id="table" style="width: 580px" border="1">
+                <table id="table" style="width: 580px;" border="1">
                     {% for item in songs %}
                     <tr>
                         <td width=30px>{{ item.id }}</td>
@@ -162,6 +175,7 @@
                 <text>V1.0.3</text>
                 <ul>
                     <li>添加封面视图</li>
+                    <li>使用Session储存视图选择</li>
                 </ul>
             </div>
             <div style="clear: both;"> </div>

@@ -129,7 +129,6 @@ a:hover {
 }
 
 #card-wrap {
-	display: none;
 	flex-direction: row;
 	flex-wrap: wrap;
 }
