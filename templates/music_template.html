@@ -8,19 +8,22 @@
         <script type="text/javascript">
             
             var songs = [];
-            var player = "";
+            var player;
+            var playerCover;
             var pid = 0;
             var cn = 0;
             var eid = 0;
             
             function changeSong(id) {
+                player.pause()
                 pid = id;
                 document.getElementById("player-title").innerHTML = songs[id].title;
                 document.getElementById("player-duration").innerHTML = songs[id].duration;
                 document.getElementById("player-album").innerHTML = songs[id].album;
                 document.getElementById("player-singer").innerHTML = songs[id].singer;
-                document.getElementById("player-cover").src = songs[id].cover;
-                document.getElementById("player-audio").src = songs[id].url;
+                playerCover.src = songs[id].cover;
+                playerCover.id = "player-cover";
+                player.src = songs[id].url;
             }
             
             window.onload = function() {
@@ -62,13 +65,23 @@
                     }
                 };
             }
+            
+            function changeView(id) {
+                if(id == 0) {
+                    document.getElementById("table").style.display = "block";
+                    document.getElementById("card-wrap").style.display = "none";
+                } else if(id == 1) {
+                    document.getElementById("table").style.display = "none";
+                    document.getElementById("card-wrap").style.display = "flex"; 
+                }
+            }
 
         </script>
     </head>
     <body>
         <div id="wrap">
             <div id="header">
-                <h1>DAM Music Manager V1.0.2</h1>
+                <h1>DAM Music Manager V1.0.3</h1>
             </div>
             <div id="player">
                 <img id="player-cover" class="pause" src="{{ songs[0].cover }}" alt="music cover" width=100px height=100px />
@@ -81,15 +94,23 @@
                 <audio id="player-audio" src="{{ songs[0].url }}" controls="controls" />
             </div>
             <div id="right">
-                <table style="width: 580px" border="1">
+                <table id="table" style="width: 580px" border="1">
                     {% for item in songs %}
                     <tr>
                         <td width=30px>{{ item.id }}</td>
-                        <td><a class="test" href="javascript:changeSong({{ item.id - 1 - (page-1) * cn }});">{{ item.title }}</a></td>
+                        <td><a href="javascript:changeSong({{ item.id - 1 - (page-1) * cn }});">{{ item.title }}</a></td>
                         <td>{{ item.singer }}</td>
                     </tr>
                     {% endfor %}
                 </table>
+                <div id="card-wrap">
+                    {% for item in songs %}
+                    <div id="card">
+                        <img src="{{ item.cover }}" width=100px height=100px style="margin-bottom: 8px"/>
+                        <h3><a href="javascript:changeSong({{ item.id - 1 - (page-1) * cn }});">{{ item.title }}</a></h3>
+                    </div>
+                    {% endfor %}
+                </div>
                 <br />
                 <div id="pn">
                     {% if page == 1 %}
@@ -121,16 +142,26 @@
                     <li><a href="{{ href }}music/can/page=1&cn={{ cn }}">Cantonese Classic</a></li>
                 </ul>
                 <br />
-                <text>Songs per page:</text>
+                <h2>Songs per page:</h2>
                 <div>
                     <a href="{{ href }}music/{{ style }}/page=1&cn=10">10</a>
                     <a href="{{ href }}music/{{ style }}/page=1&cn=15">15</a>
                     <a href="{{ href }}music/{{ style }}/page=1&cn=20">20</a>
                 </div>
                 <br />
-                <h2>版本说明：V1.0.2</h2>
+                <h2>View in:</h2>
+                <div>
+                    <a href="javascript:changeView(0)">Table</a>
+                    <a href="javascript:changeView(1)">Cover</a>
+                </div>
+                <br />
+                <text>V1.0.2</text>
                 <ul>
                     <li>添加自动按顺序播放该页所有歌曲功能</li>
+                </ul>
+                <text>V1.0.3</text>
+                <ul>
+                    <li>添加封面视图</li>
                 </ul>
             </div>
             <div style="clear: both;"> </div>
