@@ -1,6 +1,6 @@
-# musicManager
-a Flask Program designed for
-Digital Assets Management Course Assignement
+# music manager
+
+a Flask Program designed for Digital Assets Management Course Assignement
 
 ### Deploy
 1.this program can be depolyed via gunicorn:
